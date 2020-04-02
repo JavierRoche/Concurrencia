@@ -25,11 +25,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         categoriesViewController.tabBarItem = UITabBarItem.init(title: "Categories", image: UIImage(systemName: "folder.fill"), tag: 1)
         usersViewController.tabBarItem = UITabBarItem.init(title: "Users", image: UIImage.init(systemName: "person.3.fill"), tag: 2)
         //Creamos los navigation para cada vista que queramos que tenga navegacion y titulo
-        let categoriesNavigationViewController = UINavigationController.init(rootViewController: categoriesViewController)
+        let topicsNavigationViewController = UINavigationController.init(rootViewController: topicsViewController)
         // Creamos la tabBar y la configuramos con los ViewController
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [topicsViewController, categoriesNavigationViewController, usersViewController]
+        tabBarController.viewControllers = [topicsNavigationViewController, categoriesViewController, usersViewController]
         tabBarController.tabBar.barStyle = .default
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.tabBar.tintColor = UIColor.init(red: 65/255.0, green: 169/255.0, blue: 76/255.0, alpha: 1.0)
+        
+        //Le pondemos algo de diseño a la barra de navegacion
+        UINavigationBar.appearance().overrideUserInterfaceStyle = .light
+        UINavigationBar.appearance().tintColor = UIColor.init(red: 65/255.0, green: 169/255.0, blue: 76/255.0, alpha: 1.0)
         
         // Al iniciarse la aplicacion, la ventana carga un controlador de vista en ella (rootViewController) que sera el tabBar
         guard let windowScene = (scene as? UIWindowScene) else { return }

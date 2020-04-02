@@ -17,6 +17,8 @@
 		18728DBF24349C37000F0BFC /* CategoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18728DBD24349C37000F0BFC /* CategoriesViewController.xib */; };
 		18728DC224349C76000F0BFC /* UsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18728DC024349C76000F0BFC /* UsersViewController.swift */; };
 		18728DC324349C76000F0BFC /* UsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18728DC124349C76000F0BFC /* UsersViewController.xib */; };
+		18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A87B3D243515F9004D4881 /* TopicDetailViewController.swift */; };
+		18A87B40243515F9004D4881 /* TopicDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18A87B3E243515F9004D4881 /* TopicDetailViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		18728DBD24349C37000F0BFC /* CategoriesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoriesViewController.xib; sourceTree = "<group>"; };
 		18728DC024349C76000F0BFC /* UsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewController.swift; sourceTree = "<group>"; };
 		18728DC124349C76000F0BFC /* UsersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersViewController.xib; sourceTree = "<group>"; };
+		18A87B3D243515F9004D4881 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
+		18A87B3E243515F9004D4881 /* TopicDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopicDetailViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,7 @@
 			children = (
 				18728DB22433AD94000F0BFC /* TopicsViewController.swift */,
 				18728DB32433AD94000F0BFC /* TopicsViewController.xib */,
+				18A87B342434FDDC004D4881 /* Detail */,
 			);
 			path = Topics;
 			sourceTree = "<group>";
@@ -101,6 +106,15 @@
 				18728DC124349C76000F0BFC /* UsersViewController.xib */,
 			);
 			path = Users;
+			sourceTree = "<group>";
+		};
+		18A87B342434FDDC004D4881 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				18A87B3D243515F9004D4881 /* TopicDetailViewController.swift */,
+				18A87B3E243515F9004D4881 /* TopicDetailViewController.xib */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,6 +180,7 @@
 				18728DA82433A760000F0BFC /* Assets.xcassets in Resources */,
 				18728DBF24349C37000F0BFC /* CategoriesViewController.xib in Resources */,
 				18728DB52433AD94000F0BFC /* TopicsViewController.xib in Resources */,
+				18A87B40243515F9004D4881 /* TopicDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +193,7 @@
 			files = (
 				18728D9F2433A75B000F0BFC /* AppDelegate.swift in Sources */,
 				18728DB42433AD94000F0BFC /* TopicsViewController.swift in Sources */,
+				18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */,
 				18728DC224349C76000F0BFC /* UsersViewController.swift in Sources */,
 				18728DBE24349C37000F0BFC /* CategoriesViewController.swift in Sources */,
 				18728DBA243493AE000F0BFC /* SceneDelegate.swift in Sources */,
