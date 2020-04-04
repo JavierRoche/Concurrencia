@@ -8,6 +8,19 @@
 
 import UIKit
 
+enum ErrorTypes: Error {
+    case statusCode
+    case malformedURL
+    case malformedData
+    var description: String {
+        switch self {
+        case .statusCode: return "Status code failure"
+        case .malformedURL: return "Malformed URL"
+        case .malformedData: return "Couldn't decodable API response"
+        }
+    }
+}
+
 class TopicsViewController: UIViewController {
     @IBOutlet weak var latestTopics: UITableView!
     
@@ -23,7 +36,18 @@ class TopicsViewController: UIViewController {
                 self?.topics = array
                 self?.latestTopics.reloadData()
             case .failure(let error):
-                print(error.localizedDescription)
+                if let errorType = error as? ErrorTypes {
+                    switch errorType {
+                    case .malformedURL:
+                        self?.showAlert(title: "Error", message: errorType.description)
+                    case .malformedData:
+                        self?.showAlert(title: "Error", message: errorType.description)
+                    case .statusCode:
+                        self?.showAlert(title: "Error", message: errorType.description)
+                    }
+                } else {
+                    self?.showAlert(title: "Server Error", message: error.localizedDescription)
+                }
             }
         }
     }
@@ -41,8 +65,10 @@ class TopicsViewController: UIViewController {
     func setupData(completion: @escaping (Result<[Topic], Error>) -> Void) {
         print("TopicsViewController: func setupData")
         /// Creamos la URL utilizando el constructor con string, capturamos el posible error
-        //OJO FALTA CAPTURAR EL ERROR
-        guard let topicsURL = URL(string: "https://mdiscourse.keepcoding.io/latest.json") else { return }
+        guard let topicsURL = URL(string: "https://mdiscourse.keepcoding.io/latest.json") else {
+            completion(.failure(ErrorTypes.malformedURL))
+            return
+        }
         /// Creamos la request y le asignamos los valores necesarios del API
         var request = URLRequest(url: topicsURL)
         request.httpMethod = "GET"
@@ -54,9 +80,8 @@ class TopicsViewController: UIViewController {
         let session = URLSession(configuration: configuration)
         /// La session lanza su datatask con la request
         let dataTask = session.dataTask(with: request) { (data, response, error) in
-            /// El parametro error tiene errores de servicio con el servidor
             if let error = error {
-                print("Error: \(error.localizedDescription)")
+                /// Devolvemos el tipo Error con los errores de servicio API
                 DispatchQueue.main.async {
                     completion(.failure(error))
                 }
@@ -64,15 +89,23 @@ class TopicsViewController: UIViewController {
             }
             /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
             if let response = response as? HTTPURLResponse, let data = data {
-                print("Status Code: \(response.statusCode)")
+                print("Latest Topics Status Code: \(response.statusCode)")
                 if response.statusCode == self.cn200 {
-                    guard let response = try? JSONDecoder().decode(LatestTopicsResponse.self, from: data) else {
-                        print("JSONDecoder failed")
-                        return
+                    do {
+                        let response = try JSONDecoder().decode(LatestTopicsResponse.self, from: data)
+                        /// Devolvemos el array que contiene los topics recuperados
+                        DispatchQueue.main.async {
+                            completion(.success(response.topicList.topics))
+                        }
+                    } catch {
+                        /// Devolvemos el tipo Error para la no decodificacion de la response
+                        DispatchQueue.main.async {
+                            completion(.failure(ErrorTypes.malformedData))
+                        }
                     }
-                    print("JSONDecoder success")
+                } else {
                     DispatchQueue.main.async {
-                        completion(.success(response.topicList.topics))
+                        completion(.failure(ErrorTypes.statusCode))
                     }
                 }
             }
@@ -118,5 +151,15 @@ extension TopicsViewController: UITableViewDataSource {
         let cell = latestTopics.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = topics[indexPath.row].title
         return cell
+    }
+}
+
+// MARK: UIViewController Personal Utilities
+extension UIViewController {
+    /// Funcion para la generacion de mensajes de alerta
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
     }
 }

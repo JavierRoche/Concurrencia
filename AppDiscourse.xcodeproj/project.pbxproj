@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		186EE83924374F1D006166CC /* SingleTopicResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186EE83824374F1D006166CC /* SingleTopicResponse.swift */; };
 		18728D9F2433A75B000F0BFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18728D9E2433A75B000F0BFC /* AppDelegate.swift */; };
 		18728DA82433A760000F0BFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA72433A760000F0BFC /* Assets.xcassets */; };
 		18728DAB2433A760000F0BFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA92433A760000F0BFC /* LaunchScreen.storyboard */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		186EE83824374F1D006166CC /* SingleTopicResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTopicResponse.swift; sourceTree = "<group>"; };
 		18728D9B2433A75B000F0BFC /* AppDiscourse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppDiscourse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18728D9E2433A75B000F0BFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18728DA02433A75B000F0BFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				18BB0A1D24365FD500030302 /* LatestTopicsResponse.swift */,
+				186EE83824374F1D006166CC /* SingleTopicResponse.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				18BB0A1E24365FD500030302 /* LatestTopicsResponse.swift in Sources */,
 				18728DB42433AD94000F0BFC /* TopicsViewController.swift in Sources */,
 				18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */,
+				186EE83924374F1D006166CC /* SingleTopicResponse.swift in Sources */,
 				18728DC224349C76000F0BFC /* UsersViewController.swift in Sources */,
 				18728DBE24349C37000F0BFC /* CategoriesViewController.swift in Sources */,
 				18728DBA243493AE000F0BFC /* SceneDelegate.swift in Sources */,
