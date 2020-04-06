@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		186EE83924374F1D006166CC /* SingleTopicResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186EE83824374F1D006166CC /* SingleTopicResponse.swift */; };
 		18728D9F2433A75B000F0BFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18728D9E2433A75B000F0BFC /* AppDelegate.swift */; };
 		18728DA82433A760000F0BFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA72433A760000F0BFC /* Assets.xcassets */; };
 		18728DAB2433A760000F0BFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA92433A760000F0BFC /* LaunchScreen.storyboard */; };
@@ -20,11 +19,13 @@
 		18728DC324349C76000F0BFC /* UsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18728DC124349C76000F0BFC /* UsersViewController.xib */; };
 		18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A87B3D243515F9004D4881 /* TopicDetailViewController.swift */; };
 		18A87B40243515F9004D4881 /* TopicDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18A87B3E243515F9004D4881 /* TopicDetailViewController.xib */; };
-		18BB0A1E24365FD500030302 /* LatestTopicsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BB0A1D24365FD500030302 /* LatestTopicsResponse.swift */; };
+		18B14464243B6901004341B2 /* ResponsesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2C2F02439E52E00AECD50 /* ResponsesManager.swift */; };
+		18BB0A1E24365FD500030302 /* ResponsesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BB0A1D24365FD500030302 /* ResponsesModel.swift */; };
+		18F2C2F72439FA7300AECD50 /* NewTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2C2F52439FA7300AECD50 /* NewTopicViewController.swift */; };
+		18F2C2F82439FA7300AECD50 /* NewTopicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18F2C2F62439FA7300AECD50 /* NewTopicViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		186EE83824374F1D006166CC /* SingleTopicResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTopicResponse.swift; sourceTree = "<group>"; };
 		18728D9B2433A75B000F0BFC /* AppDiscourse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppDiscourse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18728D9E2433A75B000F0BFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18728DA02433A75B000F0BFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +40,10 @@
 		18728DC124349C76000F0BFC /* UsersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersViewController.xib; sourceTree = "<group>"; };
 		18A87B3D243515F9004D4881 /* TopicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailViewController.swift; sourceTree = "<group>"; };
 		18A87B3E243515F9004D4881 /* TopicDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopicDetailViewController.xib; sourceTree = "<group>"; };
-		18BB0A1D24365FD500030302 /* LatestTopicsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestTopicsResponse.swift; sourceTree = "<group>"; };
+		18BB0A1D24365FD500030302 /* ResponsesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsesModel.swift; sourceTree = "<group>"; };
+		18F2C2F02439E52E00AECD50 /* ResponsesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsesManager.swift; sourceTree = "<group>"; };
+		18F2C2F52439FA7300AECD50 /* NewTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicViewController.swift; sourceTree = "<group>"; };
+		18F2C2F62439FA7300AECD50 /* NewTopicViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewTopicViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +94,7 @@
 			children = (
 				18728DB22433AD94000F0BFC /* TopicsViewController.swift */,
 				18728DB32433AD94000F0BFC /* TopicsViewController.xib */,
+				18F2C2F22439FA2100AECD50 /* New */,
 				18A87B342434FDDC004D4881 /* Detail */,
 			);
 			path = Topics;
@@ -141,10 +146,19 @@
 		18BB0A1C24365F8D00030302 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
-				18BB0A1D24365FD500030302 /* LatestTopicsResponse.swift */,
-				186EE83824374F1D006166CC /* SingleTopicResponse.swift */,
+				18BB0A1D24365FD500030302 /* ResponsesModel.swift */,
+				18F2C2F02439E52E00AECD50 /* ResponsesManager.swift */,
 			);
 			path = Responses;
+			sourceTree = "<group>";
+		};
+		18F2C2F22439FA2100AECD50 /* New */ = {
+			isa = PBXGroup;
+			children = (
+				18F2C2F52439FA7300AECD50 /* NewTopicViewController.swift */,
+				18F2C2F62439FA7300AECD50 /* NewTopicViewController.xib */,
+			);
+			path = New;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +223,7 @@
 				18728DAB2433A760000F0BFC /* LaunchScreen.storyboard in Resources */,
 				18728DA82433A760000F0BFC /* Assets.xcassets in Resources */,
 				18728DBF24349C37000F0BFC /* CategoriesViewController.xib in Resources */,
+				18F2C2F82439FA7300AECD50 /* NewTopicViewController.xib in Resources */,
 				18728DB52433AD94000F0BFC /* TopicsViewController.xib in Resources */,
 				18A87B40243515F9004D4881 /* TopicDetailViewController.xib in Resources */,
 			);
@@ -222,10 +237,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				18728D9F2433A75B000F0BFC /* AppDelegate.swift in Sources */,
-				18BB0A1E24365FD500030302 /* LatestTopicsResponse.swift in Sources */,
+				18BB0A1E24365FD500030302 /* ResponsesModel.swift in Sources */,
 				18728DB42433AD94000F0BFC /* TopicsViewController.swift in Sources */,
+				18F2C2F72439FA7300AECD50 /* NewTopicViewController.swift in Sources */,
 				18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */,
-				186EE83924374F1D006166CC /* SingleTopicResponse.swift in Sources */,
+				18B14464243B6901004341B2 /* ResponsesManager.swift in Sources */,
 				18728DC224349C76000F0BFC /* UsersViewController.swift in Sources */,
 				18728DBE24349C37000F0BFC /* CategoriesViewController.swift in Sources */,
 				18728DBA243493AE000F0BFC /* SceneDelegate.swift in Sources */,

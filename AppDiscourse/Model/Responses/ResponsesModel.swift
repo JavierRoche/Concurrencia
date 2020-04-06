@@ -21,13 +21,26 @@ struct TopicList: Codable {
 }
 
 struct Topic: Codable {
-    let id: Int
-    let title: String
-    let postCount: Int
+    var id: Int
+    var title: String?
+    let postCount: Int?
+    let topicID: Int?
+    let topicSlug: String?
+    let details: Detail?
     enum CodingKeys: String, CodingKey {
         case id
         case title
         case postCount = "posts_count"
+        case topicID = "topic_id"
+        case topicSlug = "topic_slug"
+        case details
+    }
+}
+
+struct Detail: Codable {
+    let canDelete: Bool?
+    enum CodingKeys: String, CodingKey {
+        case canDelete = "can_delete"
     }
 }
 
