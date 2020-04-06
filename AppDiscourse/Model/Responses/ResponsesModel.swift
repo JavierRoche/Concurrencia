@@ -8,7 +8,7 @@
 
 import Foundation
 
-// MARK: Latest Topics Response Model
+// MARK: Topics Response Model
 struct LatestTopicsResponse: Codable {
     let topicList: TopicList
     enum CodingKeys: String, CodingKey {
@@ -42,6 +42,24 @@ struct Detail: Codable {
     enum CodingKeys: String, CodingKey {
         case canDelete = "can_delete"
     }
+}
+
+
+// MARK: Categories Response Model
+struct CategoriesResponse: Codable {
+    let categoryList: CategoryList
+    enum CodingKeys: String, CodingKey {
+        case categoryList = "category_list"
+    }
+}
+struct CategoryList: Codable {
+    let categories: [Category]
+    enum CodingKeys: String, CodingKey {
+        case categories
+    }
+}
+struct Category: Codable {
+    let name: String
 }
 
 

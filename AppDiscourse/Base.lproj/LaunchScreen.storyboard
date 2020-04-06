@@ -15,18 +15,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon180" translatesAutoresizingMaskIntoConstraints="NO" id="GZm-5S-kNc">
-                                <rect key="frame" x="127" y="368" width="160" height="160"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="160" id="h7G-jJ-BKz"/>
-                                    <constraint firstAttribute="width" constant="160" id="zNS-Zv-eJq"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="AppImage87" translatesAutoresizingMaskIntoConstraints="NO" id="GZm-5S-kNc">
+                                <rect key="frame" x="163.5" y="404.5" width="87" height="87"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="GZm-5S-kNc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ScP-7z-Cgd"/>
-                            <constraint firstItem="GZm-5S-kNc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="cDv-yt-kr3"/>
+                            <constraint firstItem="GZm-5S-kNc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="K8n-wn-dv8"/>
+                            <constraint firstItem="GZm-5S-kNc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="RHY-mr-KI5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -37,6 +33,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon180" width="180" height="180"/>
+        <image name="AppImage87" width="87" height="87"/>
     </resources>
 </document>

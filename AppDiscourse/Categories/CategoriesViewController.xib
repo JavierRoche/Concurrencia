@@ -9,7 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CategoriesViewController" customModule="AppDiscourse" customModuleProvider="target">
             <connections>
-                <outlet property="categories" destination="UJf-JZ-9XM" id="ck8-9j-JNO"/>
+                <outlet property="categoriesTableView" destination="UJf-JZ-9XM" id="XHe-vD-vBT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
