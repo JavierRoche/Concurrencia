@@ -38,19 +38,15 @@ class TopicDetailViewController: UIViewController {
                 self?.topic = topic
                 
             case .failure(let error):
-                if let errorType = error as? ErrorTypes {
-                    switch errorType {
-                    case .malformedURL:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .malformedData:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .statusCode:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .charsNumber:
-                        self?.showAlert(title: "Error", message: errorType.description)
+                DispatchQueue.main.async {
+                    if let errorType = error as? ErrorTypes {
+                        switch errorType {
+                        case .malformedURL, .malformedData, .statusCode:
+                            self?.showAlert(title: "Error", message: errorType.description)
+                        }
+                    } else {
+                        self?.showAlert(title: "Server Error", message: error.localizedDescription)
                     }
-                } else {
-                    self?.showAlert(title: "Server Error", message: error.localizedDescription)
                 }
             }
         }
@@ -73,59 +69,60 @@ class TopicDetailViewController: UIViewController {
         /// La session es un URLSession con una URLSessionConfiguracion por defecto
         let configuration: URLSessionConfiguration = URLSessionConfiguration.default
         let session: URLSession = URLSession.init(configuration: configuration)
-        /// La session lanza su datatask con la request
-        let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
-            /// El parametro error tiene errores de servicio con el servidor
-            if let error = error {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-            /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
-            if let response = response as? HTTPURLResponse, let data = data {
-                print("Sigle Topic Status Code: \(response.statusCode)")
-                if response.statusCode == 200 {
-                    do {
-                        let response = try JSONDecoder().decode(Topic.self, from: data)
-                        /// En el caso de que no se haya recuperado canDelete y sea nil le damos valor false
-                        if (response.details?.canDelete ?? false) {
-                            /// Permitiremos borrar el topic solo si el parametro can_delete existe y es true
-                            guard let canDelete: Bool = response.details?.canDelete else { return }
-                            let image: String = canDelete ? "trash.fill" : "trash.slash.fill"
-                            let trashType = UIImage.init(systemName: image)
-                            DispatchQueue.main.async { [weak self] in
-                                self?.deleteButton.setBackgroundImage(trashType, for: .normal)
-                                self?.deleteButton.isEnabled = canDelete
-                                self?.idTopicLabel.text = "Topic ID:\(response.id)"
-                                self?.titleTopicLabel.text = response.title
-                                self?.postNumberTopicLabel.text = "Nº post: \(response.postCount ?? 0)"
-                            }
-                            
-                        } else {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.deleteButton.setBackgroundImage(UIImage.init(systemName: "trash.slash.fill"), for: .normal)
-                                self?.deleteButton.isEnabled = false
-                                self?.idTopicLabel.text = "Topic ID:\(response.id)"
-                                self?.titleTopicLabel.text = response.title
-                                self?.postNumberTopicLabel.text = "Nº post: \(response.postCount ?? 0)"
-                            }
-                        }
-
-                    } catch {
-                        /// Devolvemos el tipo Error para la no decodificacion de la response
-                        DispatchQueue.main.async {
-                            completion(.failure(ErrorTypes.malformedData))
-                        }
-                    }
-                    
-                } else {
+        
+        /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        DispatchQueue.global(qos: .utility).async {
+            let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
+                /// El parametro error tiene errores de servicio con el servidor
+                if let error = error {
                     DispatchQueue.main.async {
-                        completion(.failure(ErrorTypes.statusCode))
+                        completion(.failure(error))
+                    }
+                }
+                /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
+                if let response = response as? HTTPURLResponse, let data = data {
+                    print("Sigle Topic Status Code: \(response.statusCode)")
+                    if response.statusCode == 200 {
+                        do {
+                            let response = try JSONDecoder().decode(Topic.self, from: data)
+                            /// En el caso de que no se haya recuperado canDelete y sea nil le damos valor false
+                            if (response.details?.canDelete ?? false) {
+                                /// Permitiremos borrar el topic solo si el parametro can_delete existe y es true
+                                guard let canDelete: Bool = response.details?.canDelete else { return }
+                                let image: String = canDelete ? "trash.fill" : "trash.slash.fill"
+                                let trashType = UIImage.init(systemName: image)
+                                DispatchQueue.main.async { [weak self] in
+                                    self?.deleteButton.setBackgroundImage(trashType, for: .normal)
+                                    self?.deleteButton.isEnabled = canDelete
+                                    self?.idTopicLabel.text = "Topic ID:\(response.id)"
+                                    self?.titleTopicLabel.text = response.title
+                                    self?.postNumberTopicLabel.text = "Nº post: \(response.postCount ?? 0)"
+                                }
+                                
+                            } else {
+                                DispatchQueue.main.async { [weak self] in
+                                    self?.deleteButton.setBackgroundImage(UIImage.init(systemName: "trash.slash.fill"), for: .normal)
+                                    self?.deleteButton.isEnabled = false
+                                    self?.idTopicLabel.text = "Topic ID:\(response.id)"
+                                    self?.titleTopicLabel.text = response.title
+                                    self?.postNumberTopicLabel.text = "Nº post: \(response.postCount ?? 0)"
+                                }
+                            }
+                        } catch {
+                            /// Devolvemos el tipo Error para la no decodificacion de la response
+                            DispatchQueue.main.async {
+                                completion(.failure(ErrorTypes.malformedData))
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(.failure(ErrorTypes.statusCode))
+                        }
                     }
                 }
             }
+            dataTask.resume()
         }
-        dataTask.resume()
     }
     
     
@@ -134,7 +131,7 @@ class TopicDetailViewController: UIViewController {
         print("TopicDetailViewController: deleteButtonTapped")
         guard let topicID: Int = self.topic?.id, let urlDiscourse: URL = URL(string: "https://mdiscourse.keepcoding.io/t/\(topicID).json") else {
             DispatchQueue.main.async { [weak self] in
-                self?.showAlert(title: "Error", message: "")
+                self?.showAlert(title: "Error", message: ErrorTypes.malformedURL.description)
             }
             return
         }
@@ -147,34 +144,38 @@ class TopicDetailViewController: UIViewController {
         /// La session es un URLSession con una URLSessionConfiguracion por defecto
         let configuration: URLSessionConfiguration = URLSessionConfiguration.default
         let session: URLSession = URLSession.init(configuration: configuration)
-        /// La session lanza su datatask con la request
-        let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
-            /// El parametro error tiene errores de servicio con el servidor
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.showAlert(title: "Error", message: error.localizedDescription)
-                }
-                return
-            }
-            /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
-            if let response = response as? HTTPURLResponse {
-                if response.statusCode == 200 {
+        
+        /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        DispatchQueue.global(qos: .utility).async {
+            let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
+                /// El parametro error tiene errores de servicio con el servidor
+                if let error = error {
                     DispatchQueue.main.async { [weak self] in
-                        self?.deleteButton.setBackgroundImage(UIImage.init(systemName: "trash.slash.fill"), for: .normal)
-                        self?.deleteButton.isEnabled = false
-                        self?.showAlert(title: "Success", message: "Topic deleted")
-                        /// Comunicamos con TopicsViewController para que repinte la tabla
-                        guard let deletedTopic: Topic = self?.topic else { return }
-                        self?.delegate?.updateTableAfterDelete(deletedTopic: deletedTopic)
+                        self?.showAlert(title: "Error", message: error.localizedDescription)
                     }
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.showAlert(title: "StatusCode \(response.statusCode)", message: "Couldn't delete the topic")
+                    return
+                }
+                /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
+                if let response = response as? HTTPURLResponse {
+                    if response.statusCode == 200 {
+                        DispatchQueue.main.async { [weak self] in
+                            /// Comunicamos con TopicsViewController para que repinte la tabla
+                            guard let deletedTopic: Topic = self?.topic else { return }
+                            self?.delegate?.updateTableAfterDelete(deletedTopic: deletedTopic)
+                            /// Desabilitamos el boton para uso obligado del boton de navegacion
+                            self?.deleteButton.setBackgroundImage(UIImage.init(systemName: "trash.slash.fill"), for: .normal)
+                            self?.deleteButton.isEnabled = false
+                            self?.showAlert(title: "Success", message: "Topic deleted")
+                        }
+                    } else {
+                        DispatchQueue.main.async { [weak self] in
+                            self?.showAlert(title: "StatusCode \(response.statusCode)", message: "Couldn't delete the topic")
+                        }
                     }
                 }
             }
+            dataTask.resume()
         }
-        dataTask.resume()
     }
 }
 

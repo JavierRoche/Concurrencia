@@ -15,7 +15,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="AppImage87" translatesAutoresizingMaskIntoConstraints="NO" id="GZm-5S-kNc">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="AppImage87" highlightedImage="folder.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="GZm-5S-kNc">
                                 <rect key="frame" x="163.5" y="404.5" width="87" height="87"/>
                             </imageView>
                         </subviews>
@@ -34,5 +34,6 @@
     </scenes>
     <resources>
         <image name="AppImage87" width="87" height="87"/>
+        <image name="folder.circle" catalog="system" width="64" height="60"/>
     </resources>
 </document>

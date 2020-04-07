@@ -28,8 +28,14 @@ class CategoriesViewController: UIViewController {
                 self?.categories = categories
                 self?.categoriesTableView.reloadData()
             case .failure(let error):
-                print(error)
-                self?.showAlert(title: "Error", message: error.localizedDescription)
+                if let errorType = error as? ErrorTypes {
+                    switch errorType {
+                    case .malformedURL, .malformedData, .statusCode:
+                        self?.showAlert(title: "Error", message: errorType.description)
+                    }
+                } else {
+                    self?.showAlert(title: "Server Error", message: error.localizedDescription)
+                }
             }
         }
     }
@@ -48,6 +54,7 @@ extension CategoriesViewController: UITableViewDelegate {
         return 180
     }
 }
+
 
 // MARK: DataSource
 extension CategoriesViewController: UITableViewDataSource {

@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: Topic Error Responses Model
 /// Modelo personalizado de respuesta erronea del API
-struct DiscourseAPIError: Codable {
+struct DiscourseAPIError: Codable, Error {
     let action: String?
     let errors: [String]?
 }
@@ -19,13 +19,11 @@ enum ErrorTypes: Error {
     case statusCode
     case malformedURL
     case malformedData
-    case charsNumber
     var description: String {
         switch self {
         case .statusCode: return "Status code failure"
         case .malformedURL: return "Malformed URL"
         case .malformedData: return "Couldn't decodable API response"
-        case .charsNumber: return "Title and body must have 15 characters at less"
         }
     }
 }

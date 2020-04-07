@@ -26,13 +26,7 @@ class TopicsViewController: UIViewController {
             case .failure(let error):
                 if let errorType = error as? ErrorTypes {
                     switch errorType {
-                    case .malformedURL:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .malformedData:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .statusCode:
-                        self?.showAlert(title: "Error", message: errorType.description)
-                    case .charsNumber:
+                    case .malformedURL, .malformedData, .statusCode:
                         self?.showAlert(title: "Error", message: errorType.description)
                     }
                 } else {
@@ -98,7 +92,7 @@ extension TopicsViewController: UITableViewDelegate, TopicComunicationDelegate {
     
     /// Funcion delegada de UITableViewDelegate para altura de celda
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 50
     }
 }
 
@@ -119,6 +113,7 @@ extension TopicsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = latestTopics.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = topics[indexPath.row].title
+        cell.imageView?.image = UIImage.init(named: "AppImage40")
         return cell
     }
 }
@@ -126,7 +121,7 @@ extension TopicsViewController: UITableViewDataSource {
 
 // MARK: API Request
 extension TopicsViewController {
-    func latestTopicsAPIDiscourseRequest(completion: @escaping (Result<[Topic], Error>) -> Void) {
+    func latestTopicsAPIDiscourseRequest(completion: @escaping (Result<[Topic], Error>) -> (Void)) {
         /// Creamos la URL utilizando el constructor con string, capturamos el posible error
         guard let topicsURL: URL = URL(string: "https://mdiscourse.keepcoding.io/latest.json") else {
             completion(.failure(ErrorTypes.malformedURL))
@@ -141,38 +136,41 @@ extension TopicsViewController {
         /// La session es un URLSession con una URLSessionConfiguracion por defecto
         let configuration: URLSessionConfiguration = URLSessionConfiguration.default
         let session: URLSession = URLSession(configuration: configuration)
-        /// La session lanza su URLSessionDatatask con la request
-        let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
-            if let error = error {
-                /// Devolvemos el tipo Error con los errores de servicio API
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-                return
-            }
-            /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
-            if let response = response as? HTTPURLResponse, let data = data {
-                print("Latest Topics Status Code: \(response.statusCode)")
-                if response.statusCode == 200 {
-                    /// Devolvemos el array que contiene los topics recuperados
-                    do {
-                        let response = try JSONDecoder().decode(LatestTopicsResponse.self, from: data)
-                        DispatchQueue.main.async {
-                            completion(.success(response.topicList.topics))
-                        }
-                    /// Devolvemos el tipo Error para la no decodificacion de la response
-                    } catch {
-                        DispatchQueue.main.async {
-                            completion(.failure(ErrorTypes.malformedData))
-                        }
-                    }
-                } else {
+        
+        /// La session lanza su URLSessionDatatask con la request. Esta bloquea el hilo principal por el acceso a la red
+        DispatchQueue.global(qos: .utility).async {
+            let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    /// Devolvemos el tipo Error con los errores de servicio API
                     DispatchQueue.main.async {
-                        completion(.failure(ErrorTypes.statusCode))
+                        completion(.failure(error))
+                    }
+                    return
+                }
+                /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
+                if let response = response as? HTTPURLResponse, let data = data {
+                    print("Latest Topics Status Code: \(response.statusCode)")
+                    if response.statusCode == 200 {
+                        /// Devolvemos el array que contiene los topics recuperados
+                        do {
+                            let response = try JSONDecoder().decode(LatestTopicsResponse.self, from: data)
+                            DispatchQueue.main.async {
+                                completion(.success(response.topicList.topics))
+                            }
+                        /// Devolvemos el tipo Error para la no decodificacion de la response
+                        } catch {
+                            DispatchQueue.main.async {
+                                completion(.failure(ErrorTypes.malformedData))
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(.failure(ErrorTypes.statusCode))
+                        }
                     }
                 }
             }
+            dataTask.resume()
         }
-        dataTask.resume()
     }
 }
