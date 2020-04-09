@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1824853A243CE7C300CA50AF /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18248538243CE7C300CA50AF /* UserDetailViewController.swift */; };
+		1824853B243CE7C300CA50AF /* UserDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18248539243CE7C300CA50AF /* UserDetailViewController.xib */; };
+		1835F0B9243F55BB0028E66C /* UsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1835F0B8243F55BB0028E66C /* UsersTableViewCell.swift */; };
+		1835F0BB243F55CF0028E66C /* UsersTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1835F0BA243F55CF0028E66C /* UsersTableViewCell.xib */; };
 		18728D9F2433A75B000F0BFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18728D9E2433A75B000F0BFC /* AppDelegate.swift */; };
 		18728DA82433A760000F0BFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA72433A760000F0BFC /* Assets.xcassets */; };
 		18728DAB2433A760000F0BFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18728DA92433A760000F0BFC /* LaunchScreen.storyboard */; };
@@ -26,6 +30,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18248538243CE7C300CA50AF /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
+		18248539243CE7C300CA50AF /* UserDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserDetailViewController.xib; sourceTree = "<group>"; };
+		1835F0B8243F55BB0028E66C /* UsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewCell.swift; sourceTree = "<group>"; };
+		1835F0BA243F55CF0028E66C /* UsersTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UsersTableViewCell.xib; sourceTree = "<group>"; };
 		18728D9B2433A75B000F0BFC /* AppDiscourse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppDiscourse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18728D9E2433A75B000F0BFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18728DA02433A75B000F0BFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +65,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18248537243CE77600CA50AF /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				18248538243CE7C300CA50AF /* UserDetailViewController.swift */,
+				18248539243CE7C300CA50AF /* UserDetailViewController.xib */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		1835F0B7243F55810028E66C /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1835F0B8243F55BB0028E66C /* UsersTableViewCell.swift */,
+				1835F0BA243F55CF0028E66C /* UsersTableViewCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		18728D922433A75B000F0BFC = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +140,8 @@
 			children = (
 				18728DC024349C76000F0BFC /* UsersViewController.swift */,
 				18728DC124349C76000F0BFC /* UsersViewController.xib */,
+				1835F0B7243F55810028E66C /* Cell */,
+				18248537243CE77600CA50AF /* Detail */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -221,10 +249,12 @@
 			files = (
 				18728DC324349C76000F0BFC /* UsersViewController.xib in Resources */,
 				18728DAB2433A760000F0BFC /* LaunchScreen.storyboard in Resources */,
+				1835F0BB243F55CF0028E66C /* UsersTableViewCell.xib in Resources */,
 				18728DA82433A760000F0BFC /* Assets.xcassets in Resources */,
 				18728DBF24349C37000F0BFC /* CategoriesViewController.xib in Resources */,
 				18F2C2F82439FA7300AECD50 /* NewTopicViewController.xib in Resources */,
 				18728DB52433AD94000F0BFC /* TopicsViewController.xib in Resources */,
+				1824853B243CE7C300CA50AF /* UserDetailViewController.xib in Resources */,
 				18A87B40243515F9004D4881 /* TopicDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,9 +272,11 @@
 				18F2C2F72439FA7300AECD50 /* NewTopicViewController.swift in Sources */,
 				18A87B3F243515F9004D4881 /* TopicDetailViewController.swift in Sources */,
 				18B14464243B6901004341B2 /* ResponsesManager.swift in Sources */,
+				1824853A243CE7C300CA50AF /* UserDetailViewController.swift in Sources */,
 				18728DC224349C76000F0BFC /* UsersViewController.swift in Sources */,
 				18728DBE24349C37000F0BFC /* CategoriesViewController.swift in Sources */,
 				18728DBA243493AE000F0BFC /* SceneDelegate.swift in Sources */,
+				1835F0B9243F55BB0028E66C /* UsersTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

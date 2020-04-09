@@ -7,112 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5057E529-07ED-499A-B0C6-8F8AEF195D0E"
+            uuid = "AD44F220-FFCD-4A5C-8346-D5BB62988691"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AppDiscourse/Topics/New/NewTopicViewController.swift"
+            filePath = "AppDiscourse/Users/Detail/UserDetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "submitNewTopicTapped(_:)"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "textFieldShouldReturn(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "175695D5-B0A5-409C-AB6B-1301AAD46B06"
+            uuid = "1DB45EB4-C2BA-474B-A306-9E7F90CB2E42"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AppDiscourse/Topics/New/NewTopicViewController.swift"
+            filePath = "AppDiscourse/Users/Cell/UsersTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "submitNewTopicTapped(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F8125379-F00D-49EB-9DD8-9CA377151CE5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AppDiscourse/Topics/New/NewTopicViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "submitNewTopicTapped(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F8125379-F00D-49EB-9DD8-9CA377151CE5 - 2cc1fdf67f604a10"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Result&lt;AppDiscourse.Topic, Swift.Error&gt;) -&gt; () in AppDiscourse.NewTopicViewController.submitNewTopicTapped(Any) -&gt; ()"
-                  moduleName = "AppDiscourse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/apple/Documents/Desarrollo/Concurrencia/AppDiscourse/AppDiscourse/Topics/New/NewTopicViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "1105">
-               </Location>
-               <Location
-                  uuid = "F8125379-F00D-49EB-9DD8-9CA377151CE5 - 2cc1fdf67f604a10"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Result&lt;AppDiscourse.Topic, Swift.Error&gt;) -&gt; () in AppDiscourse.NewTopicViewController.submitNewTopicTapped(Any) -&gt; ()"
-                  moduleName = "AppDiscourse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/apple/Documents/Desarrollo/Concurrencia/AppDiscourse/AppDiscourse/Topics/New/NewTopicViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "1170">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7FA4BE14-DF98-4B5C-8ACF-355D5A760CB5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AppDiscourse/Topics/New/NewTopicViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "newTopicAPIDiscourseRequest(completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "80D8E66A-D82F-418E-BB47-FED418200580"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AppDiscourse/Topics/New/NewTopicViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "newTopicAPIDiscourseRequest(completion:)"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "setCell(user:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

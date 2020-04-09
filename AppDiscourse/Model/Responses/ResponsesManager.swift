@@ -43,3 +43,4 @@ extension UIViewController {
 //            return String(topic.id)
 //        }
 //        print(tabla1)
+//print(String(bytes: data, encoding: .utf8) ?? "")

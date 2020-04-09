@@ -26,9 +26,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         usersViewController.tabBarItem = UITabBarItem.init(title: "Users", image: UIImage.init(systemName: "person.3.fill"), tag: 2)
         //Creamos los navigation para cada vista que queramos que tenga navegacion y titulo
         let topicsNavigationViewController = UINavigationController.init(rootViewController: topicsViewController)
+        let usersNavigationViewController = UINavigationController.init(rootViewController: usersViewController)
         // Creamos la tabBar y la configuramos con los ViewController
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [topicsNavigationViewController, categoriesViewController, usersViewController]
+        tabBarController.viewControllers = [topicsNavigationViewController, categoriesViewController, usersNavigationViewController]
         tabBarController.tabBar.barStyle = .default
         tabBarController.tabBar.isTranslucent = false
         tabBarController.tabBar.tintColor = UIColor.init(red: 65/255.0, green: 169/255.0, blue: 76/255.0, alpha: 1.0)

@@ -31,7 +31,7 @@ class NewTopicViewController: UIViewController {
         titleTextField?.delegate = self
         titleTextField?.keyboardType = UIKeyboardType.alphabet
         titleTextField?.keyboardAppearance = UIKeyboardAppearance.default
-        titleTextField?.returnKeyType = .send
+        titleTextField?.returnKeyType = .done
         postTextField?.delegate = self
         postTextField?.keyboardType = UIKeyboardType.alphabet
         postTextField?.keyboardAppearance = UIKeyboardAppearance.default
@@ -64,7 +64,7 @@ class NewTopicViewController: UIViewController {
                         }
                     } else if let errorType = error as? DiscourseAPIError {
                         let message: String = (errorType.errors?.joined(separator: "\n"))!
-                        self?.showAlert(title: errorType.action!, message: message)
+                        self?.showAlert(title: String(errorType.action ?? "Error"), message: message)
                     } else {
                         self?.showAlert(title: "Server Error", message: error.localizedDescription)
                     }
@@ -77,8 +77,28 @@ class NewTopicViewController: UIViewController {
         print("TopicsViewController: closeViewRightBarButtonItemTapped")
         self.dismiss(animated: true, completion: nil)
     }
-    
-    // MARK: API Request
+}
+
+
+// MARK: Delegate (Hiding Keyboard)
+extension NewTopicViewController: UITextFieldDelegate, UITextViewDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+}
+
+
+// MARK: API Request
+extension NewTopicViewController {
     func newTopicAPIDiscourseRequest(completion: @escaping (Result<Topic, Error>) -> Void) {
         /// Creamos la URL utilizando el constructor con string, capturamos el posible error
         guard let discourseURL: URL = URL.init(string: "https://mdiscourse.keepcoding.io/posts.json") else {
@@ -90,21 +110,16 @@ class NewTopicViewController: UIViewController {
         /// Esta request POST necesita de un body que se incluye en la request serializado
         guard let titleText: String = titleTextField?.text, let postText: String = postTextField?.text else { return }
         let body: [String: String] = [
-            "title": "\(titleText)",
-            "raw": "\(postText)"
+            "title": titleText,
+            "raw": postText
         ]
         /// Creamos la request y le asignamos los valores necesarios del API
         var request: URLRequest = URLRequest(url: discourseURL)
-        guard let dataBody = try? JSONSerialization.data(withJSONObject: body) else {
-            DispatchQueue.main.async {
-                completion(.failure(ErrorTypes.malformedData))
-            }
-            return
-        }
+        guard let dataBody = try? JSONSerialization.data(withJSONObject: body) else { return }
         request.httpBody = dataBody
         request.httpMethod = "POST"
-        request.addValue("699667f923e65fac39b632b0d9b2db0d9ee40f9da15480ada4bcb3c1b095b7a", forHTTPHeaderField: "Api-Key")
-        request.addValue("Tushe2", forHTTPHeaderField: "Api-Username")
+        request.addValue("699667f923e65fac39b632b0d9b2db0d9ee40f9da15480ad5a4bcb3c1b095b7a", forHTTPHeaderField: "Api-Key")
+        request.addValue("Tushe", forHTTPHeaderField: "Api-Username")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         /// La session es un URLSession con una URLSessionConfiguracion por defecto
         let configuration: URLSessionConfiguration = URLSessionConfiguration.default
@@ -153,22 +168,5 @@ class NewTopicViewController: UIViewController {
             }
             dataTask.resume()
         }
-    }
-}
-
-
-// MARK: Delegate (Hiding Keyboard)
-extension NewTopicViewController: UITextFieldDelegate, UITextViewDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
     }
 }

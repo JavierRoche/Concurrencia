@@ -63,6 +63,39 @@ struct Category: Codable {
 }
 
 
+// MARK: Users Response Model
+struct UsersDirectoryResponse: Codable {
+    let directoryItems: [Users]
+    enum CodingKeys: String, CodingKey {
+        case directoryItems = "directory_items"
+    }
+}
+struct Users: Codable {
+    let id: Int?
+    let topicsEntered: Int?
+    let user: User
+    enum CodingKeys: String, CodingKey {
+        case id
+        case topicsEntered = "topics_entered"
+        case user
+    }
+}
+struct User: Codable {
+    let id: Int
+    let username: String
+    let name: String?
+    let avatarTemplate: String
+    let canEditName: Bool?
+    enum CodingKeys: String, CodingKey {
+        case id
+        case username
+        case name
+        case avatarTemplate = "avatar_template"
+        case canEditName = "can_edit_name"
+    }
+}
+
+
 
 // MARK: API Response Sample
 // https://docs.discourse.org

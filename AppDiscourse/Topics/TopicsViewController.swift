@@ -79,6 +79,9 @@ extension TopicsViewController: UITableViewDelegate, TopicComunicationDelegate {
         /// Introducimos en el array el nuevo topic creado
         topics.insert(createdTopic, at: 0)
         latestTopics.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.showAlert(title: String("Success"), message: "Topic created!")
+        }
     }
     
     /// Funcion delegada de UITableViewDelegate para seleccion de celda
@@ -131,7 +134,7 @@ extension TopicsViewController {
         var request: URLRequest = URLRequest(url: topicsURL)
         request.httpMethod = "GET"
         request.addValue("699667f923e65fac39b632b0d9b2db0d9ee40f9da15480ad5a4bcb3c1b095b7a", forHTTPHeaderField: "Api-Key")
-        request.addValue("Tushe2", forHTTPHeaderField: "Api-Username")
+        request.addValue("Tushe", forHTTPHeaderField: "Api-Username")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         /// La session es un URLSession con una URLSessionConfiguracion por defecto
         let configuration: URLSessionConfiguration = URLSessionConfiguration.default
