@@ -8,11 +8,6 @@
 
 import UIKit
 
-// MARK: Protocolo de comunicacion
-protocol UsersComunicationDelegate: class {
-    func updateTableAfterDelete(modifiedUser: User)
-}
-
 class UserDetailViewController: UIViewController {
     @IBOutlet weak var idUserLabel: UILabel!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -32,10 +27,12 @@ class UserDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        nameTextField.delegate = self
-        nameTextField.keyboardType = UIKeyboardType.alphabet
-        nameTextField.keyboardAppearance = UIKeyboardAppearance.default
-        nameTextField.returnKeyType = .done
+        DispatchQueue.main.async { [weak self] in
+            self?.nameTextField.delegate = self
+            self?.nameTextField.keyboardType = UIKeyboardType.alphabet
+            self?.nameTextField.keyboardAppearance = UIKeyboardAppearance.default
+            self?.nameTextField.returnKeyType = .done
+        }
         
         self.singleUserAPIDiscourseRequest { [weak self] (result) in
             switch result {
@@ -43,16 +40,49 @@ class UserDetailViewController: UIViewController {
                 self?.user = user
                 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    if let errorType = error as? ErrorTypes {
-                        switch errorType {
-                        case .malformedURL, .malformedData, .statusCode:
+                if let errorType = error as? ErrorTypes {
+                    switch errorType {
+                    case .malformedURL, .malformedData, .statusCode:
+                        DispatchQueue.main.async {
                             self?.showAlert(title: "Error", message: errorType.description)
                         }
-                    } else {
+                    }
+                    
+                } else {
+                    DispatchQueue.main.async {
                         self?.showAlert(title: "Server Error", message: error.localizedDescription)
                     }
                 }
+            }
+        }
+    }
+    
+    
+    // MARK: Functions
+    func configureUI(users: Users) {
+        /// En el caso de que no se haya recuperado canDelete y sea nil le damos valor false
+        if users.user.canEditName ?? false {
+            /// Permitiremos borrar el topic solo si el parametro can_delete existe y es true
+            guard let canUpdate: Bool = users.user.canEditName else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.updateNameButton.isEnabled = canUpdate
+                self?.nameLabel.isHidden = canUpdate
+                self?.nameTextField.isHidden = !canUpdate
+                
+                self?.idUserLabel.text = "User ID:\(users.user.id)"
+                self?.userNameLabel.text = "Username: \(users.user.username)"
+                self?.nameTextField.text = users.user.name
+            }
+            
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateNameButton.isEnabled = false
+                self?.nameLabel.isHidden = false
+                self?.nameTextField.isHidden = true
+                
+                self?.idUserLabel.text = "User ID :\(users.user.id)"
+                self?.userNameLabel.text = "Username: \(users.user.username)"
+                self?.nameLabel.text = users.user.name
             }
         }
     }
@@ -73,7 +103,9 @@ extension UserDetailViewController {
     func singleUserAPIDiscourseRequest(completion: @escaping (Result<User, Error>) -> Void) {
         /// Creamos la URL utilizando el constructor con string, capturamos el posible error
         guard let discourseURL: URL = URL(string: "https://mdiscourse.keepcoding.io/users/\(self.user?.username ?? "keepcoding").json") else {
-            completion(.failure(ErrorTypes.malformedURL))
+            DispatchQueue.main.async {
+                completion(.failure(ErrorTypes.malformedURL))
+            }
             return
         }
         /// Creamos la request y le asignamos los valores necesarios del API
@@ -87,7 +119,7 @@ extension UserDetailViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
         
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .utility).async { [weak self] in
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 /// El parametro error tiene errores de servicio con el servidor
                 if let error = error {
@@ -97,41 +129,18 @@ extension UserDetailViewController {
                 }
                 /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
                 if let response = response as? HTTPURLResponse, let data = data {
-                    print("Sigle User Status Code: \(response.statusCode)")
                     if response.statusCode == 200 {
                         do {
                             let response = try JSONDecoder().decode(Users.self, from: data)
-                            /// En el caso de que no se haya recuperado canDelete y sea nil le damos valor false
-                            if response.user.canEditName ?? false {
-                                /// Permitiremos borrar el topic solo si el parametro can_delete existe y es true
-                                guard let canUpdate: Bool = response.user.canEditName else { return }
-                                DispatchQueue.main.async { [weak self] in
-                                    self?.updateNameButton.isEnabled = canUpdate
-                                    self?.nameLabel.isHidden = canUpdate
-                                    self?.nameTextField.isHidden = !canUpdate
-                                    
-                                    self?.idUserLabel.text = "User ID:\(response.user.id)"
-                                    self?.userNameLabel.text = "Username: \(response.user.username)"
-                                    self?.nameTextField.text = response.user.name
-                                }
-                                
-                            } else {
-                                DispatchQueue.main.async { [weak self] in
-                                    self?.updateNameButton.isEnabled = false
-                                    self?.nameLabel.isHidden = false
-                                    self?.nameTextField.isHidden = true
-                                    
-                                    self?.idUserLabel.text = "User ID :\(response.user.id)"
-                                    self?.userNameLabel.text = "Username: \(response.user.username)"
-                                    self?.nameLabel.text = response.user.name
-                                }
-                            }
+                            self?.configureUI(users: response)
+                            
                         } catch {
                             /// Devolvemos el tipo Error para la no decodificacion de la response
                             DispatchQueue.main.async {
                                 completion(.failure(ErrorTypes.malformedData))
                             }
                         }
+                        
                     } else {
                         DispatchQueue.main.async {
                             completion(.failure(ErrorTypes.statusCode))
@@ -144,7 +153,6 @@ extension UserDetailViewController {
     }
     
     @IBAction func updateButtonTapped(_ sender: Any) {
-        print("UserDetailViewController: updateButtonTapped")
         guard let username: String = self.user?.username, let discourseURL: URL = URL(string: "https://mdiscourse.keepcoding.io/users/\(username).json") else {
             DispatchQueue.main.async { [weak self] in
                 self?.showAlert(title: "Error", message: ErrorTypes.malformedURL.description)
@@ -174,11 +182,11 @@ extension UserDetailViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
                 
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .utility).async { [weak self] in
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                     /// El parametro error tiene errores de servicio con el servidor
                 if let error = error {
-                    DispatchQueue.main.async { [weak self] in
+                    DispatchQueue.main.async {
                         self?.showAlert(title: "Error", message: error.localizedDescription)
                     }
                     return
@@ -186,15 +194,18 @@ extension UserDetailViewController {
                 /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
                 if let response = response as? HTTPURLResponse {
                     if response.statusCode == 200 {
-                        DispatchQueue.main.async { [weak self] in
-                            /// Comunicamos con TopicsViewController para que repinte la tabla
-                            guard let updatedUser: User = self?.user else { return }
-                            self?.delegate?.updateTableAfterDelete(modifiedUser: updatedUser)
+                        /// Comunicamos con TopicsViewController para que repinte la tabla
+                        guard let updatedUser: User = self?.user else { return }
+                        self?.delegate?.updateTableAfterDelete(modifiedUser: updatedUser)
+                        DispatchQueue.main.async {
+                            self?.nameLabel.text = self?.nameTextField.text
+                            self?.nameLabel.isHidden = false
+                            self?.nameTextField.isHidden = true
                             self?.updateNameButton.isEnabled = false
                             self?.showAlert(title: "Success", message: "User's name updated")
                         }
                     } else {
-                        DispatchQueue.main.async { [weak self] in
+                        DispatchQueue.main.async {
                             self?.showAlert(title: "StatusCode \(response.statusCode)", message: "Couldn't update the user")
                         }
                     }

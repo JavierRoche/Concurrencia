@@ -51,14 +51,15 @@
                 </label>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x2g-Sj-BqZ">
                     <rect key="frame" x="177" y="483" width="60" height="57.5"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="60" id="IZe-cU-AfU"/>
                         <constraint firstAttribute="height" constant="60" id="aXw-e3-C0N"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <state key="normal" backgroundImage="arrowshape.turn.up.right.fill" catalog="system"/>
+                    <color key="tintColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" backgroundImage="arrowshape.turn.up.right.fill" catalog="system">
+                        <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
                     <connections>
                         <action selector="updateButtonTapped:" destination="-1" eventType="touchUpInside" id="nis-9S-Vu7"/>
                     </connections>
@@ -72,7 +73,7 @@
                     <textInputTraits key="textInputTraits"/>
                 </textField>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="lNM-wK-UdI" firstAttribute="top" secondItem="gBV-PF-7ey" secondAttribute="bottom" constant="30" id="0Tn-7r-WRy"/>
                 <constraint firstItem="7XX-fG-IzE" firstAttribute="top" secondItem="lNM-wK-UdI" secondAttribute="bottom" constant="30" id="1xx-kS-tnm"/>

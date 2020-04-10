@@ -15,10 +15,12 @@ class UsersTableViewCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     
     override func awakeFromNib() {
-//        foto.layer.cornerRadius = 8
-//        foto.layer.borderColor  = UIColor.white.withAlphaComponent(0.2).cgColor
-//        foto.layer.borderWidth  = 1.0
+        avatarImage.layer.cornerRadius = 8
+        avatarImage.layer.borderColor  = UIColor.white.withAlphaComponent(0.2).cgColor
+        avatarImage.layer.borderWidth  = 1.0
     }
+    
+    
     //MARK: Functions
     func setCell(user: User) {
         let url: String = "https://mdiscourse.keepcoding.io\(user.avatarTemplate)"
@@ -26,7 +28,6 @@ class UsersTableViewCell: UITableViewCell {
 
         /// Comienza la ejecucion concurrente porque bloquea el hilo principal por el acceso a la red
         DispatchQueue.global(qos:.userInitiated).async { [weak self] in
-        
             guard let urlAvatar: URL = URL(string: avatarURL) else { return }
             guard let data = try? Data(contentsOf: urlAvatar) else { return }
             let image = UIImage(data: data)

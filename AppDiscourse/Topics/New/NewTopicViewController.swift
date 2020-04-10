@@ -35,7 +35,7 @@ class NewTopicViewController: UIViewController {
         postTextField?.delegate = self
         postTextField?.keyboardType = UIKeyboardType.alphabet
         postTextField?.keyboardAppearance = UIKeyboardAppearance.default
-        postTextField?.returnKeyType = .send
+        postTextField?.returnKeyType = .done
         postTextField?.layer.borderColor = CGColor.init(srgbRed: 196/255.0, green: 196/255.0, blue: 196/255.0, alpha: 0.75)
         postTextField?.layer.borderWidth = 1.0;
         postTextField?.layer.cornerRadius = 5.0;
@@ -49,23 +49,34 @@ class NewTopicViewController: UIViewController {
             case .success(let topic):
                 /// Creacion correcta del topic avisamos al TopicViewController para que repinte la tabla
                 guard let title: String = self?.titleTextField.text else { return }
-                let details: Detail = Detail(canDelete: false)
+                let details: Detail = Detail(canDelete: false, canEdit: false)
                 let newTopic: Topic = Topic(id: topic.topicID!, title: title, postCount: 1, topicID: topic.topicID, topicSlug: topic.topicSlug, details: details)
                 self?.delegate?.updateTableAfterCreate(createdTopic: newTopic)
-                /// Cerramos el NewTopicViewController presentado
-                self?.dismiss(animated: true, completion: nil)
+                /// Modificamos la UI para que no salida cerrando ventana
+                DispatchQueue.main.async {
+                    self?.titleTextField.isEnabled = false
+                    self?.postTextField.isUserInteractionEnabled = false
+                    self?.submitPostButton.isEnabled = false
+                    self?.showAlert(title: String("Success"), message: "Topic created!")
+                }
                 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    if let errorType = error as? ErrorTypes {
-                        switch errorType {
-                        case .malformedURL, .malformedData, .statusCode:
+                if let errorType = error as? ErrorTypes {
+                    switch errorType {
+                    case .malformedURL, .malformedData, .statusCode:
+                        DispatchQueue.main.async {
                             self?.showAlert(title: "Error", message: errorType.description)
                         }
-                    } else if let errorType = error as? DiscourseAPIError {
-                        let message: String = (errorType.errors?.joined(separator: "\n"))!
+                    }
+                    
+                } else if let errorType = error as? DiscourseAPIError {
+                    let message: String = (errorType.errors?.joined(separator: "\n"))!
+                    DispatchQueue.main.async {
                         self?.showAlert(title: String(errorType.action ?? "Error"), message: message)
-                    } else {
+                    }
+                    
+                } else {
+                    DispatchQueue.main.async {
                         self?.showAlert(title: "Server Error", message: error.localizedDescription)
                     }
                 }
@@ -74,7 +85,6 @@ class NewTopicViewController: UIViewController {
     }
     
     @objc func closeViewRightBarButtonItemTapped() {
-        print("TopicsViewController: closeViewRightBarButtonItemTapped")
         self.dismiss(animated: true, completion: nil)
     }
 }

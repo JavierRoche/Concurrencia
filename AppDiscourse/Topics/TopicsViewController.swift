@@ -8,6 +8,14 @@
 
 import UIKit
 
+// MARK: Views Comunication Protocol
+protocol TopicComunicationDelegate: class {
+    func updateTableAfterCreate(createdTopic: Topic)
+    func updateTableAfterDelete(deletedTopic: Topic)
+    func updateTableAfterUpdate(updatedTopic: Topic)
+}
+
+
 class TopicsViewController: UIViewController {
     @IBOutlet weak var latestTopics: UITableView!
     
@@ -36,6 +44,7 @@ class TopicsViewController: UIViewController {
         }
     }
     
+    
     // MARK: Functions
     func setupUI() {
         self.title = "Latest Topics"
@@ -44,14 +53,15 @@ class TopicsViewController: UIViewController {
         latestTopics.delegate = self
         /// Configuraremos el UITableView para que reconozca la clase de la celda
         latestTopics.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
         /// Creacion del boton de la barra de navegacion para crear nuevo topic
         let rightBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(newTopicRightBarButtonItemTapped))
-        rightBarButtonItem.tintColor = .black
+        rightBarButtonItem.tintColor = UIColor.init(red: 220/255.0, green: 146/255.0, blue: 40/255.0, alpha: 1.0)
         navigationItem.rightBarButtonItem = rightBarButtonItem
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.init(red: 220/255.0, green: 146/255.0, blue: 40/255.0, alpha: 1.0)] 
     }
     
     @objc func newTopicRightBarButtonItemTapped() {
-        print("TopicsViewController: newTopicRightBarButtonItemTapped")
         let newTopicViewController: NewTopicViewController = NewTopicViewController.init()
         /// SIempre hay que indicarle quien sera delegado de los eventos
         newTopicViewController.delegate = self
@@ -65,6 +75,13 @@ class TopicsViewController: UIViewController {
 // MARK: Delegate
 extension TopicsViewController: UITableViewDelegate, TopicComunicationDelegate {
     /// Funcion delegada de comunicacion con TopicComunicationDelegate
+    func updateTableAfterCreate(createdTopic: Topic) {
+        /// Introducimos en el array el nuevo topic creado
+        topics.insert(createdTopic, at: 0)
+        latestTopics.reloadData()
+    }
+    
+    /// Funcion delegada de comunicacion con TopicComunicationDelegate
     func updateTableAfterDelete(deletedTopic: Topic) {
         /// Eliminamos del array de topics el recien borrado
         let newsTopics: [Topic] = topics.filter { (topic) -> Bool in
@@ -75,15 +92,19 @@ extension TopicsViewController: UITableViewDelegate, TopicComunicationDelegate {
     }
     
     /// Funcion delegada de comunicacion con TopicComunicationDelegate
-    func updateTableAfterCreate(createdTopic: Topic) {
-        /// Introducimos en el array el nuevo topic creado
-        topics.insert(createdTopic, at: 0)
-        latestTopics.reloadData()
-        DispatchQueue.main.async { [weak self] in
-            self?.showAlert(title: String("Success"), message: "Topic created!")
+    func updateTableAfterUpdate(updatedTopic: Topic) {
+        /// Modificamos en el array de topics el recien modificado
+        let updatedTopics: [Topic] = self.topics.map { (topic) -> Topic in
+            var auxTopic: Topic = topic
+            if topic.id == updatedTopic.id {
+                auxTopic.title = updatedTopic.title
+            }
+            return auxTopic
         }
+        topics = updatedTopics
+        latestTopics.reloadData()
     }
-    
+
     /// Funcion delegada de UITableViewDelegate para seleccion de celda
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail: TopicDetailViewController = TopicDetailViewController.init(topic: topics[indexPath.row])
@@ -115,8 +136,10 @@ extension TopicsViewController: UITableViewDataSource {
     /// Funcion delegada de UITableViewDataSource para el repintado de celdas
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = latestTopics.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = topics[indexPath.row].title
-        cell.imageView?.image = UIImage.init(named: "AppImage40")
+        DispatchQueue.main.async { [weak self] in
+            cell.textLabel?.text = self?.topics[indexPath.row].title
+            cell.imageView?.image = UIImage.init(named: "AppImage40")
+        }
         return cell
     }
 }
@@ -152,7 +175,6 @@ extension TopicsViewController {
                 }
                 /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
                 if let response = response as? HTTPURLResponse, let data = data {
-                    print("Latest Topics Status Code: \(response.statusCode)")
                     if response.statusCode == 200 {
                         /// Devolvemos el array que contiene los topics recuperados
                         do {

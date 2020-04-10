@@ -8,6 +8,12 @@
 
 import UIKit
 
+// MARK: Views Comunication Protocol
+protocol UsersComunicationDelegate: class {
+    func updateTableAfterDelete(modifiedUser: User)
+}
+
+
 class UsersViewController: UIViewController {
     @IBOutlet weak var usersList: UITableView!
     
@@ -17,6 +23,7 @@ class UsersViewController: UIViewController {
         super.viewDidLoad()
             
         self.setupUI()
+        self.setupData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -25,6 +32,7 @@ class UsersViewController: UIViewController {
         self.setupData()
     }
         
+    
     // MARK: Functions
     func setupUI() {
         /// Registramos en el UITableView el tipo de celda que contendra
@@ -37,7 +45,6 @@ class UsersViewController: UIViewController {
         usersList.delegate = self
         /// Configuraremos el UITableView para que reconozca la clase de la celda
         usersList.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        self.setupData()
     }
     
     func setupData() {
@@ -51,15 +58,21 @@ class UsersViewController: UIViewController {
                 if let errorType = error as? ErrorTypes {
                     switch errorType {
                     case .malformedURL, .malformedData, .statusCode:
-                        self?.showAlert(title: "Error", message: errorType.description)
+                        DispatchQueue.main.async {
+                            self?.showAlert(title: "Error", message: errorType.description)
+                        }
                     }
+                    
                 } else {
-                    self?.showAlert(title: "Server Error", message: error.localizedDescription)
+                    DispatchQueue.main.async {
+                        self?.showAlert(title: "Server Error", message: error.localizedDescription)
+                    }
                 }
             }
         }
     }
 }
+
 
 // MARK: Delegate
 extension UsersViewController: UITableViewDelegate, UsersComunicationDelegate {
@@ -114,7 +127,9 @@ extension UsersViewController {
     func userListAPIDiscourseRequest(completion: @escaping (Result<UsersDirectoryResponse, Error>) -> (Void)) {
         /// Creamos la URL utilizando el constructor con string, capturamos el posible error
         guard let topicsURL: URL = URL(string: "https://mdiscourse.keepcoding.io/directory_items.json?period=all&order=topics_entered") else {
-            completion(.failure(ErrorTypes.malformedURL))
+            DispatchQueue.main.async {
+                completion(.failure(ErrorTypes.malformedURL))
+            }
             return
         }
         /// Creamos la request y le asignamos los valores necesarios del API

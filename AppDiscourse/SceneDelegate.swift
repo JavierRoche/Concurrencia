@@ -12,35 +12,38 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    // MARK: Jerarquia de Vista
+    // MARK: View Hierarchy
     // UIWindow -> UITabBarController -> (UINavigationController's) -> UIViewController's
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Creamos ViewController para cada tab de la app
+        /// Creamos ViewController para cada tab de la app
         let topicsViewController: TopicsViewController = TopicsViewController()
         let categoriesViewController: CategoriesViewController = CategoriesViewController()
         let usersViewController: UsersViewController = UsersViewController()
-        // Con la propiedad tabBarItem podemos fijar detalles de cada tab
+        
+        /// Con la propiedad tabBarItem podemos fijar detalles de cada tab
         topicsViewController.tabBarItem = UITabBarItem.init(title: "Topics", image: UIImage(systemName: "list.dash"), tag: 0)
         categoriesViewController.tabBarItem = UITabBarItem.init(title: "Categories", image: UIImage(systemName: "folder.fill"), tag: 1)
         usersViewController.tabBarItem = UITabBarItem.init(title: "Users", image: UIImage.init(systemName: "person.3.fill"), tag: 2)
-        //Creamos los navigation para cada vista que queramos que tenga navegacion y titulo
+        
+        /// Creamos los navigation para cada vista que queramos que tenga navegacion y titulo
         let topicsNavigationViewController = UINavigationController.init(rootViewController: topicsViewController)
         let usersNavigationViewController = UINavigationController.init(rootViewController: usersViewController)
-        // Creamos la tabBar y la configuramos con los ViewController
+        /// Creamos la tabBar y la configuramos con los ViewController
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [topicsNavigationViewController, categoriesViewController, usersNavigationViewController]
         tabBarController.tabBar.barStyle = .default
         tabBarController.tabBar.isTranslucent = false
-        tabBarController.tabBar.tintColor = UIColor.init(red: 65/255.0, green: 169/255.0, blue: 76/255.0, alpha: 1.0)
+        tabBarController.tabBar.tintColor = UIColor.init(red: 220/255.0, green: 146/255.0, blue: 40/255.0, alpha: 1.0)
         
-        //Le pondemos algo de diseño a la barra de navegacion
-        UINavigationBar.appearance().overrideUserInterfaceStyle = .light
-        UINavigationBar.appearance().tintColor = UIColor.init(red: 65/255.0, green: 169/255.0, blue: 76/255.0, alpha: 1.0)
+        /// Le pondemos algo de diseño a la barra de navegacion
+        UINavigationBar.appearance().overrideUserInterfaceStyle = .unspecified
+        UINavigationBar.appearance().tintColor = UIColor.init(red: 220/255.0, green: 146/255.0, blue: 40/255.0, alpha: 1.0)
         
-        // Al iniciarse la aplicacion, la ventana carga un controlador de vista en ella (rootViewController) que sera el tabBar
+        /// Al iniciarse la aplicacion, la ventana carga un controlador de vista en ella (rootViewController) que sera el tabBar
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        //Instanciamos la ventana usando el inicializador frame que le damos mediante el CGRect de nuestra windowScene
+        
+        /// Instanciamos la ventana usando el inicializador frame que le damos mediante el CGRect de nuestra windowScene
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = tabBarController

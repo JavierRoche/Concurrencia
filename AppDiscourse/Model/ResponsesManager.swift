@@ -28,6 +28,7 @@ enum ErrorTypes: Error {
     }
 }
 
+
 // MARK: UIViewController Personal Utilities
 extension UIViewController {
     /// Funcion para la generacion de mensajes de alerta
@@ -38,9 +39,11 @@ extension UIViewController {
     }
 }
 
-//        print("TABLA ANTES DE INSERTAR")
+
+
+// MARK: Prints
 //        var tabla1: [String] = topics.map { (topic) -> String in
 //            return String(topic.id)
 //        }
 //        print(tabla1)
-//print(String(bytes: data, encoding: .utf8) ?? "")
+//        print(String(bytes: data, encoding: .utf8) ?? "")

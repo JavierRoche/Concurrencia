@@ -1,5 +1,5 @@
 //
-//  LatestTopicsResponse.swift
+//  ResponsesModel.swift
 //  AppDiscourse
 //
 //  Created by APPLE on 02/04/2020.
@@ -39,8 +39,10 @@ struct Topic: Codable {
 
 struct Detail: Codable {
     let canDelete: Bool?
+    let canEdit: Bool?
     enum CodingKeys: String, CodingKey {
         case canDelete = "can_delete"
+        case canEdit = "can_edit"
     }
 }
 
@@ -70,6 +72,7 @@ struct UsersDirectoryResponse: Codable {
         case directoryItems = "directory_items"
     }
 }
+
 struct Users: Codable {
     let id: Int?
     let topicsEntered: Int?
@@ -80,6 +83,7 @@ struct Users: Codable {
         case user
     }
 }
+
 struct User: Codable {
     let id: Int
     let username: String
