@@ -27,7 +27,12 @@ class TopicDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        /*
+         viewDidLoad es llamado por UIKit, por tanto siempre en la main queue. No es necesario main.async.
+         Lo que conseguimos con esto es que se ejecute antes la llamada de red (se ejecuta síncronamente)
+         que el código que tienes dentro de main.async
+         */
         DispatchQueue.main.async { [weak self] in
             self?.titleTopicTextView?.delegate = self
             self?.titleTopicTextView?.keyboardType = UIKeyboardType.alphabet
@@ -37,7 +42,11 @@ class TopicDetailViewController: UIViewController {
             self?.titleTopicTextView?.layer.borderWidth = 1.0;
             self?.titleTopicTextView?.layer.cornerRadius = 5.0;
         }
-        
+
+        /*
+         Este closure, si te fijas, siempre se llama desde la main queue, pues tienes encapsuladas todas las llamadas
+         desde singleTopicAPIDiscourseRequest dentro de main.async. Por tanto, sobraría el main.async aquí dentro.
+         */
         self.singleTopicAPIDiscourseRequest { [weak self] (result) in
             switch result {
             case .success(let topic):
@@ -61,6 +70,10 @@ class TopicDetailViewController: UIViewController {
     }
     
     // MARK: Functions
+    /*
+     No está mal, pero mucho más sencillo hubiera sido llamar a configureUI() dentro de un bloque main.async,
+     de forma que no te hubieran hecho falta tantos bloques main.async aquí dentro.
+     */
     func configureUI(topic: Topic) {
         DispatchQueue.main.async { [weak self] in
             self?.idTopicLabel.text = "Topic ID: \(topic.id)"
@@ -142,6 +155,9 @@ extension TopicDetailViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
         
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         No hace falta global queue
+         */
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 /// El parametro error tiene errores de servicio con el servidor
@@ -156,6 +172,7 @@ extension TopicDetailViewController {
                     if response.statusCode == 200 {
                         do {
                             let response = try JSONDecoder().decode(Topic.self, from: data)
+                            // Esta llamada encapsulada dentro de main.async te hubiera facilitado mucho las cosas
                             self?.configureUI(topic: response)
                             
                         } catch {

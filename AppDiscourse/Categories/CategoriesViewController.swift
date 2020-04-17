@@ -66,6 +66,10 @@ extension CategoriesViewController: UITableViewDataSource {
     /// Funcion delegada de UITableViewDataSource para el repintado de celdas
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = categoriesTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        /*
+         cellForRowAt es un método llamado por UIKit y por tanto ejecutado en la main queue. No hace falta llamar a este código
+         dentro de main.async
+         */
         DispatchQueue.main.async { [weak self] in
             cell.textLabel?.font = UIFont.systemFont(ofSize: 35)
             cell.textLabel?.text = self?.categories[indexPath.row].name

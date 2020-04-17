@@ -84,6 +84,9 @@ extension TopicsViewController: UITableViewDelegate, TopicComunicationDelegate {
     /// Funcion delegada de comunicacion con TopicComunicationDelegate
     func updateTableAfterDelete(deletedTopic: Topic) {
         /// Eliminamos del array de topics el recien borrado
+        /*
+         Muy bien el uso de filter
+         */
         let newsTopics: [Topic] = topics.filter { (topic) -> Bool in
             return topic.id != deletedTopic.id
         }
@@ -138,6 +141,10 @@ extension TopicsViewController: UITableViewDataSource {
         let cell: UITableViewCell = latestTopics.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         DispatchQueue.main.async { [weak self] in
             cell.textLabel?.text = self?.topics[indexPath.row].title
+            /*
+             Como posible mejora, ya que todas las celdas usan la misma imagen,
+             te propondría declararla como estática, y usarla en todas las celdas.
+             */
             cell.imageView?.image = UIImage.init(named: "AppImage40")
         }
         return cell
@@ -164,6 +171,9 @@ extension TopicsViewController {
         let session: URLSession = URLSession(configuration: configuration)
         
         /// La session lanza su URLSessionDatatask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         Realmente dataTask no bloquea, no es necesario meter la llamada dentro de global queue. No está mal, pero realmente sobra.
+         */
         DispatchQueue.global(qos: .utility).async {
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 if let error = error {

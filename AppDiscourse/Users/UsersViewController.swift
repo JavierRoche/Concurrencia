@@ -143,6 +143,9 @@ extension UsersViewController {
         let session: URLSession = URLSession(configuration: configuration)
             
         /// La session lanza su URLSessionDatatask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         No hace falta la global queue
+         */
         DispatchQueue.global(qos: .utility).async {
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 if let error = error {

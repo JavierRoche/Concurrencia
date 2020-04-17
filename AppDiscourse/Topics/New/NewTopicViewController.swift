@@ -136,6 +136,9 @@ extension NewTopicViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
         
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         No hace falta global queue
+         */
         DispatchQueue.global(qos: .utility).async {
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 if let error = error {
@@ -148,6 +151,9 @@ extension NewTopicViewController {
                 /// Si ha habido respuesta y la podemos recibir como HTTPURLResponse y ademas hay datos
                 if let response = response as? HTTPURLResponse, let data = data {
                     print("New Topic Status Code: \(response.statusCode)")
+                    /*
+                    400 también es código de error, deberíamos poner >= 400
+                    */
                     if response.statusCode > 400 {
                         /// Tenemos una estructura para decodificar la respuesta a mostrar
                         do {

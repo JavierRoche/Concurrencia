@@ -27,6 +27,11 @@ class UserDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        /*
+         viewDidLoad es un método de UIKit que ya se ejecuta en la main queue.
+         No es necesario usar main.async aquí. Lo que haces con esto es retrasar la ejecución
+         de este código, y se ejecutará antes la llamada de red que tieenes más abajo
+         */
         DispatchQueue.main.async { [weak self] in
             self?.nameTextField.delegate = self
             self?.nameTextField.keyboardType = UIKeyboardType.alphabet
@@ -59,6 +64,10 @@ class UserDetailViewController: UIViewController {
     
     
     // MARK: Functions
+    /*
+     Más sencillo encapsular la llamada a este método en main.async, y así nos evitamos
+     usarlo tanto aquí dentro.
+     */
     func configureUI(users: Users) {
         /// En el caso de que no se haya recuperado canDelete y sea nil le damos valor false
         if users.user.canEditName ?? false {
@@ -119,6 +128,9 @@ extension UserDetailViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
         
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         No hace falta global queue
+         */
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                 /// El parametro error tiene errores de servicio con el servidor
@@ -132,6 +144,10 @@ extension UserDetailViewController {
                     if response.statusCode == 200 {
                         do {
                             let response = try JSONDecoder().decode(Users.self, from: data)
+                            /*
+                             Mucho más sencillo hubiera sido encapsular esta llamada en main.async, de forma
+                             que no tendrías que hacerlo dentro de la misma
+                             */
                             self?.configureUI(users: response)
                             
                         } catch {
@@ -182,6 +198,9 @@ extension UserDetailViewController {
         let session: URLSession = URLSession.init(configuration: configuration)
                 
         /// La session lanza su URLSessionDataTask con la request. Esta bloquea el hilo principal por el acceso a la red
+        /*
+         No hace falta la global queue
+         */
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let dataTask: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) in
                     /// El parametro error tiene errores de servicio con el servidor
